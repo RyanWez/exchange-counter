@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { LockScreen } from './components/Layout/LockScreen';
 import { Header } from './components/Layout/Header';
 import { QuickRates } from './components/Layout/QuickRates';
 import { TabBar } from './components/Layout/TabBar';
-import { RateBoard } from './pages/RateBoard';
-import { Calculator } from './pages/Calculator';
-import { CustomerManager } from './pages/CustomerManager';
-import { History } from './pages/History';
-import { DailyClosing } from './pages/DailyClosing';
+
+// Lazy load page components for better initial load performance
+const RateBoard = lazy(() => import('./pages/RateBoard').then(module => ({ default: module.RateBoard })));
+const Calculator = lazy(() => import('./pages/Calculator').then(module => ({ default: module.Calculator })));
+const CustomerManager = lazy(() => import('./pages/CustomerManager').then(module => ({ default: module.CustomerManager })));
+const History = lazy(() => import('./pages/History').then(module => ({ default: module.History })));
+const DailyClosing = lazy(() => import('./pages/DailyClosing').then(module => ({ default: module.DailyClosing })));
 
 function MainApp() {
   const { toast } = useApp();
@@ -25,11 +27,13 @@ function MainApp() {
       </div>
 
       <main className="flex-1 overflow-y-auto px-4 pt-2 pb-28">
-        {activeTab === 'rate' && <RateBoard />}
-        {activeTab === 'calc' && <Calculator />}
-        {activeTab === 'customer' && <CustomerManager />}
-        {activeTab === 'history' && <History />}
-        {activeTab === 'closing' && <DailyClosing />}
+        <Suspense fallback={<div className="flex items-center justify-center h-full text-white/50">Loading...</div>}>
+          {activeTab === 'rate' && <RateBoard />}
+          {activeTab === 'calc' && <Calculator />}
+          {activeTab === 'customer' && <CustomerManager />}
+          {activeTab === 'history' && <History />}
+          {activeTab === 'closing' && <DailyClosing />}
+        </Suspense>
       </main>
 
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} />

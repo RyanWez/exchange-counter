@@ -23,12 +23,15 @@ export function Header() {
         <>
             <header className="app-header sticky top-0 z-40 px-4 py-4">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 gold-gradient rounded-2xl flex items-center justify-center shadow-lg">
-                            <span className="text-2xl">💰</span>
+                    <div
+                        className="flex items-center gap-3 cursor-pointer active:opacity-80 transition group"
+                        onClick={() => setIsSettingsOpen(true)}
+                    >
+                        <div className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition duration-300">
+                            <img src="/images/logo.svg" alt="Logo" className="w-full h-full object-contain drop-shadow-lg" />
                         </div>
                         <div>
-                            <h1 className="font-bold text-white text-xl">{appData.settings.shopName}</h1>
+                            <h1 className="font-bold text-white text-xl group-hover:text-amber-400 transition">{appData.settings.shopName}</h1>
                             <p className="text-gray-400 text-xs">{dateStr}</p>
                         </div>
                     </div>
