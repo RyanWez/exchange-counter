@@ -43,7 +43,7 @@ function MainApp() {
         </Suspense>
       </main>
 
-      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+      {!isLocked && <TabBar activeTab={activeTab} onTabChange={setActiveTab} />}
 
       {/* Toast */}
       <div className={`fixed bottom-28 left-0 right-0 mx-auto w-fit max-w-xs z-50 text-center pointer-events-none`}>

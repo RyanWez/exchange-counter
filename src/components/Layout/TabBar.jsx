@@ -23,19 +23,17 @@ export function TabBar({ activeTab, onTabChange }) {
                                     relative flex flex-col items-center justify-center
                                     w-[18%] aspect-square rounded-2xl transition-all duration-300
                                     ${isActive
-                                        ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-[#1a1a2e] shadow-lg shadow-amber-500/20 -translate-y-4 scale-110'
+                                        ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-[#1a1a2e] shadow-lg shadow-amber-500/20 -translate-y-1'
                                         : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
                                     }
                                 `}
                             >
-                                <span className={`text-2xl mb-1 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`}>
+                                <span className={`text-2xl mb-1 transition-transform duration-300 ${isActive ? 'scale-105' : ''}`}>
                                     {tab.icon}
                                 </span>
                                 <span className={`text-[9px] font-bold transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-70'}`}>
                                     {tab.label}
                                 </span>
-
-                                {/* Active Indicator Dot (Optional, removed for cleaner look as the whole button is highlighted) */}
                             </button>
                         );
                     })}
