@@ -18,35 +18,22 @@ const DailyClosing = lazy(() => import('./pages/DailyClosing').then(module => ({
 function MainApp() {
   const { toast } = useApp();
   const [isLocked, setIsLocked] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('calc');
 
   const handleUnlock = () => {
     setIsLocked(false);
-    setIsLoading(true);
-    // Show loading animation for 1.5 seconds before revealing the app
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
   };
 
   return (
     <div className="max-w-lg mx-auto h-screen bg-[#1a1a2e] shadow-2xl relative flex flex-col overflow-hidden">
       {isLocked && <LockScreen onUnlock={handleUnlock} />}
 
-      {/* Transition Loading Screen */}
-      {isLoading && (
-        <div className="absolute inset-0 z-40 bg-[#1a1a2e] flex items-center justify-center animate-fadeInUp">
-          <Loading />
-        </div>
-      )}
-
       <div className="flex-none z-30 relative">
         <Header />
         <QuickRates />
       </div>
 
-      <main className="flex-1 overflow-y-auto px-4 pt-2 pb-28">
+      <main className="flex-1 overflow-y-auto px-4 pt-2 pb-28 no-scrollbar">
         <Suspense fallback={<div className="h-full flex items-center justify-center"><Loading /></div>}>
           {activeTab === 'rate' && <RateBoard />}
           {activeTab === 'calc' && <Calculator />}
