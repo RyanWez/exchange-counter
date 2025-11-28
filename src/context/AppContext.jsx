@@ -12,14 +12,14 @@ export function AppProvider({ children }) {
         transactions: [],
         customers: [],
         dailyClosing: [],
-        settings: { shopName: 'Shwe Hundi', pin: '1234' }
+        settings: { shopName: 'Exchange Counter', pin: '1234' }
     });
 
     const [toast, setToast] = useState({ message: '', visible: false });
 
     // Load data from localStorage on mount
     useEffect(() => {
-        const saved = localStorage.getItem('shweHundiData');
+        const saved = localStorage.getItem('exchangeCounterData');
         if (saved) {
             try {
                 setAppData(JSON.parse(saved));
@@ -31,7 +31,7 @@ export function AppProvider({ children }) {
 
     // Save data to localStorage whenever appData changes
     useEffect(() => {
-        localStorage.setItem('shweHundiData', JSON.stringify(appData));
+        localStorage.setItem('exchangeCounterData', JSON.stringify(appData));
     }, [appData]);
 
     const showToast = (message) => {

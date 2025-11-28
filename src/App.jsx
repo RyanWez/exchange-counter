@@ -1,11 +1,14 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { LockScreen } from './components/Layout/LockScreen';
 import { Header } from './components/Layout/Header';
 import { QuickRates } from './components/Layout/QuickRates';
 import { TabBar } from './components/Layout/TabBar';
+import { Loading } from './components/UI/Loading';
+// import { ReloadPrompt } from './components/PWA/ReloadPrompt';
 
-// Lazy load page components for better initial load performance
+// Lazy load page components
+import { lazy, Suspense } from 'react';
 const RateBoard = lazy(() => import('./pages/RateBoard').then(module => ({ default: module.RateBoard })));
 const Calculator = lazy(() => import('./pages/Calculator').then(module => ({ default: module.Calculator })));
 const CustomerManager = lazy(() => import('./pages/CustomerManager').then(module => ({ default: module.CustomerManager })));
@@ -15,11 +18,28 @@ const DailyClosing = lazy(() => import('./pages/DailyClosing').then(module => ({
 function MainApp() {
   const { toast } = useApp();
   const [isLocked, setIsLocked] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('calc');
+
+  const handleUnlock = () => {
+    setIsLocked(false);
+    setIsLoading(true);
+    // Show loading animation for 1.5 seconds before revealing the app
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  };
 
   return (
     <div className="max-w-lg mx-auto h-screen bg-[#1a1a2e] shadow-2xl relative flex flex-col overflow-hidden">
-      {isLocked && <LockScreen onUnlock={() => setIsLocked(false)} />}
+      {isLocked && <LockScreen onUnlock={handleUnlock} />}
+
+      {/* Transition Loading Screen */}
+      {isLoading && (
+        <div className="absolute inset-0 z-40 bg-[#1a1a2e] flex items-center justify-center animate-fadeInUp">
+          <Loading />
+        </div>
+      )}
 
       <div className="flex-none z-30 relative">
         <Header />
@@ -27,7 +47,7 @@ function MainApp() {
       </div>
 
       <main className="flex-1 overflow-y-auto px-4 pt-2 pb-28">
-        <Suspense fallback={<div className="flex items-center justify-center h-full text-white/50">Loading...</div>}>
+        <Suspense fallback={<div className="h-full flex items-center justify-center"><Loading /></div>}>
           {activeTab === 'rate' && <RateBoard />}
           {activeTab === 'calc' && <Calculator />}
           {activeTab === 'customer' && <CustomerManager />}
@@ -44,6 +64,9 @@ function MainApp() {
           {toast.message}
         </div>
       </div>
+
+      {/* PWA Reload Prompt - Uncomment after server restart */}
+      {/* <ReloadPrompt /> */}
     </div>
   );
 }
