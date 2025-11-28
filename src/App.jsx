@@ -33,7 +33,7 @@ function MainApp() {
         <QuickRates />
       </div>
 
-      <main className="flex-1 overflow-y-auto px-4 pt-2 pb-28 no-scrollbar">
+      <main className="flex-1 overflow-y-auto px-4 pt-2 pb-32 no-scrollbar">
         <Suspense fallback={<div className="h-full flex items-center justify-center"><Loading /></div>}>
           {activeTab === 'rate' && <RateBoard />}
           {activeTab === 'calc' && <Calculator />}

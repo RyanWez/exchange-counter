@@ -10,19 +10,37 @@ export function TabBar({ activeTab, onTabChange }) {
     ];
 
     return (
-        <nav className="tab-bar fixed bottom-0 left-0 right-0 z-40 px-2 pb-6 pt-2 max-w-lg mx-auto">
-            <div className="flex justify-around">
-                {tabs.map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => onTabChange(tab.id)}
-                        className={`tab-item ${activeTab === tab.id ? 'active' : ''}`}
-                    >
-                        <span className="tab-icon">{tab.icon}</span>
-                        <span>{tab.label}</span>
-                    </button>
-                ))}
-            </div>
-        </nav>
+        <div className="fixed bottom-6 left-4 right-4 z-50 max-w-[480px] mx-auto">
+            <nav className="bg-[#1a1a2e]/90 backdrop-blur-xl border border-white/10 rounded-[32px] p-2 shadow-2xl shadow-black/50">
+                <div className="flex justify-between items-center px-1">
+                    {tabs.map(tab => {
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => onTabChange(tab.id)}
+                                className={`
+                                    relative flex flex-col items-center justify-center
+                                    w-[18%] aspect-square rounded-2xl transition-all duration-300
+                                    ${isActive
+                                        ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-[#1a1a2e] shadow-lg shadow-amber-500/20 -translate-y-4 scale-110'
+                                        : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                    }
+                                `}
+                            >
+                                <span className={`text-2xl mb-1 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`}>
+                                    {tab.icon}
+                                </span>
+                                <span className={`text-[9px] font-bold transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-70'}`}>
+                                    {tab.label}
+                                </span>
+
+                                {/* Active Indicator Dot (Optional, removed for cleaner look as the whole button is highlighted) */}
+                            </button>
+                        );
+                    })}
+                </div>
+            </nav>
+        </div>
     );
 }
