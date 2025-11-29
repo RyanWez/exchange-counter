@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useUI } from '../context/UIContext';
+import { useTransactions } from '../context/TransactionContext';
 import { Card } from '../components/UI/Card';
 import { Input } from '../components/UI/Input';
 import { Modal } from '../components/UI/Modal';
 import { Voucher } from '../components/UI/Voucher';
 
 export function History() {
-    const { appData, formatNum } = useApp();
+    const { formatNum } = useUI();
+    const { transactions } = useTransactions();
     const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
     const [selectedTx, setSelectedTx] = useState(null);
 
-    const filteredTransactions = appData.transactions
+    const filteredTransactions = transactions
         .filter(tx => tx.timestamp.startsWith(filterDate))
         .reverse();
 

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AppProvider, useApp } from './context/AppContext';
+import { UIProvider, useUI } from './context/UIContext';
+import { RateProvider } from './context/RateContext';
+import { TransactionProvider } from './context/TransactionContext';
+import { UserProvider } from './context/UserContext';
 import { LockScreen } from './components/Layout/LockScreen';
 import { Header } from './components/Layout/Header';
 import { QuickRates } from './components/Layout/QuickRates';
@@ -16,7 +19,7 @@ const History = lazy(() => import('./pages/History').then(module => ({ default: 
 const DailyClosing = lazy(() => import('./pages/DailyClosing').then(module => ({ default: module.DailyClosing })));
 
 function MainApp() {
-  const { toast } = useApp();
+  const { toast } = useUI();
   const [isLocked, setIsLocked] = useState(true);
   const [activeTab, setActiveTab] = useState('calc');
 
@@ -60,9 +63,15 @@ function MainApp() {
 
 function App() {
   return (
-    <AppProvider>
-      <MainApp />
-    </AppProvider>
+    <UIProvider>
+      <UserProvider>
+        <RateProvider>
+          <TransactionProvider>
+            <MainApp />
+          </TransactionProvider>
+        </RateProvider>
+      </UserProvider>
+    </UIProvider>
   );
 }
 

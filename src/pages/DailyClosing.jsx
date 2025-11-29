@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import { useUI } from '../context/UIContext';
+import { useTransactions } from '../context/TransactionContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input } from '../components/UI/Input';
 
 export function DailyClosing() {
-    const { appData, formatNum, saveDailyClosing } = useApp();
+    const { formatNum } = useUI();
+    const { transactions, saveDailyClosing } = useTransactions();
     const [stock, setStock] = useState({ mmk: '', thb: '', usd: '', cny: '' });
     const [summary, setSummary] = useState({
         count: 0,
@@ -15,7 +17,7 @@ export function DailyClosing() {
 
     useEffect(() => {
         const today = new Date().toISOString().split('T')[0];
-        const todayTx = appData.transactions.filter(tx => tx.timestamp.startsWith(today));
+        const todayTx = transactions.filter(tx => tx.timestamp.startsWith(today));
 
         let flow = { mmk: { in: 0, out: 0 }, thb: { in: 0, out: 0 }, usd: { in: 0, out: 0 } };
 
@@ -32,7 +34,7 @@ export function DailyClosing() {
             serviceFee: todayTx.reduce((sum, tx) => sum + tx.serviceFee, 0),
             flow
         });
-    }, [appData.transactions]);
+    }, [transactions]);
 
     const handleStockChange = (currency, value) => {
         const val = value.replace(/[^0-9]/g, '');

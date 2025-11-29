@@ -1,9 +1,11 @@
 import React from 'react';
-import { useApp } from '../../context/AppContext';
+import { useUI } from '../../context/UIContext';
+import { useUser } from '../../context/UserContext';
 import { Button } from './Button';
 
 export function Voucher({ transaction, onClose }) {
-    const { appData, formatNum, formatNumAuto, showToast } = useApp();
+    const { formatNum, formatNumAuto, showToast } = useUI();
+    const { settings } = useUser();
 
     if (!transaction) return null;
 
@@ -11,7 +13,7 @@ export function Voucher({ transaction, onClose }) {
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
     const voucherText = `
-📋 ${appData.settings.shopName} - ${transaction.type === 'exchange' ? 'ငွေလဲ' : 'ငွေလွှဲ'}
+📋 ${settings.shopName} - ${transaction.type === 'exchange' ? 'ငွေလဲ' : 'ငွေလွှဲ'}
 ━━━━━━━━━━━━━━━
 🆔 ${transaction.id}
 📅 ${formattedDate}
@@ -51,7 +53,7 @@ ${transaction.recipient?.name ? `\n📍 လက်ခံသူ: ${transaction.rec
                     <div className="w-16 h-16 gold-gradient rounded-full mx-auto flex items-center justify-center mb-2 shadow-lg">
                         <span className="text-2xl">💰</span>
                     </div>
-                    <h2 className="text-xl font-bold text-white">{appData.settings.shopName}</h2>
+                    <h2 className="text-xl font-bold text-white">{settings.shopName}</h2>
                     <p className="text-sm text-gray-400">{transaction.type === 'exchange' ? 'ငွေလဲပြေစာ' : 'ငွေလွှဲပြေစာ'}</p>
                 </div>
 

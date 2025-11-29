@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { useApp } from '../../context/AppContext';
+import { useUI } from '../../context/UIContext';
+import { useUser } from '../../context/UserContext';
 import { Card } from '../UI/Card';
 import { Button } from '../UI/Button';
 import { Input } from '../UI/Input';
 
 export function LockScreen({ onUnlock }) {
-    const { appData, showToast } = useApp();
+    const { showToast } = useUI();
+    const { settings } = useUser();
     const [pin, setPin] = useState('');
 
     const handleUnlock = () => {
-        if (pin === appData.settings.pin) {
+        if (pin === settings.pin) {
             onUnlock();
         } else {
             showToast('PIN မှားနေပါသည်! ❌');

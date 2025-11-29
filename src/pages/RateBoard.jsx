@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import { useUI } from '../context/UIContext';
+import { useRates } from '../context/RateContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input } from '../components/UI/Input';
 
 export function RateBoard() {
-    const { appData, updateRates, formatNum, formatNumAuto } = useApp();
-    const [rates, setRates] = useState(appData.rates);
+    const { formatNum, formatNumAuto } = useUI();
+    const { rates: currentRates, updateRates } = useRates();
+    const [rates, setRates] = useState(currentRates);
 
     useEffect(() => {
-        setRates(appData.rates);
-    }, [appData.rates]);
+        setRates(currentRates);
+    }, [currentRates]);
 
     const handleChange = (currency, type, value) => {
         setRates(prev => ({

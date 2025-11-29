@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useUI } from '../context/UIContext';
+import { useUser } from '../context/UserContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input } from '../components/UI/Input';
 import { ConfirmModal } from '../components/UI/ConfirmModal';
 
 export function CustomerManager() {
-    const { appData, addCustomer, deleteCustomer, showToast } = useApp();
+    const { showToast } = useUI();
+    const { customers, addCustomer, deleteCustomer } = useUser();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [note, setNote] = useState('');
@@ -71,10 +73,10 @@ export function CustomerManager() {
             <Card className="rounded-3xl p-5">
                 <h2 className="text-lg font-bold text-white mb-4">📋 ဖောက်သည် စာရင်း</h2>
                 <div className="space-y-3">
-                    {appData.customers.length === 0 ? (
+                    {customers.length === 0 ? (
                         <p className="text-gray-500 text-center py-6 text-sm">ဖောက်သည် မရှိသေးပါ</p>
                     ) : (
-                        appData.customers.map(c => (
+                        customers.map(c => (
                             <div key={c.id} className="list-item flex items-center justify-between">
                                 <div>
                                     <p className="font-bold text-white">{c.name}</p>

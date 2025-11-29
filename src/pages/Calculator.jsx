@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
+import { useUI } from '../context/UIContext';
+import { useRates } from '../context/RateContext';
+import { useTransactions } from '../context/TransactionContext';
+import { useUser } from '../context/UserContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input, Select } from '../components/UI/Input';
@@ -7,7 +10,10 @@ import { Modal } from '../components/UI/Modal';
 import { Voucher } from '../components/UI/Voucher';
 
 export function Calculator() {
-    const { appData, getRate, formatNum, formatNumAuto, addTransaction, showToast } = useApp();
+    const { formatNum, formatNumAuto, showToast } = useUI();
+    const { rates, getRate } = useRates();
+    const { addTransaction } = useTransactions();
+    const { customers } = useUser();
 
     const [mode, setMode] = useState('exchange');
     const [fromCurrency, setFromCurrency] = useState('MMK');
@@ -25,7 +31,7 @@ export function Calculator() {
 
     useEffect(() => {
         calculate();
-    }, [fromCurrency, toCurrency, amount, appData.rates]);
+    }, [fromCurrency, toCurrency, amount, rates]);
 
     const calculate = () => {
         const val = parseFloat(amount.replace(/,/g, '')) || 0;
@@ -33,10 +39,10 @@ export function Calculator() {
         setResult(val * rate);
 
         if (fromCurrency === 'MMK' && toCurrency !== 'MMK') {
-            const sellRate = appData.rates[toCurrency.toLowerCase()]?.sell || 1;
+            const sellRate = rates[toCurrency.toLowerCase()]?.sell || 1;
             setRateDisplay(`1 ${toCurrency} = ${formatNumAuto(sellRate)} MMK`);
         } else if (fromCurrency !== 'MMK' && toCurrency === 'MMK') {
-            const buyRate = appData.rates[fromCurrency.toLowerCase()]?.buy || 1;
+            const buyRate = rates[fromCurrency.toLowerCase()]?.buy || 1;
             setRateDisplay(`1 ${fromCurrency} = ${formatNumAuto(buyRate)} MMK`);
         } else {
             setRateDisplay(`1 ${fromCurrency} = ${formatNumAuto(rate)} ${toCurrency}`);
@@ -81,9 +87,9 @@ export function Calculator() {
             serviceFee: fee,
             payment,
             customerId,
-            customerName: customerId ? appData.customers.find(c => c.id === customerId)?.name : 'Walk-in',
+            customerName: customerId ? customers.find(c => c.id === customerId)?.name : 'Walk-in',
             recipient: mode === 'transfer' ? recipient : null,
-            rateSnapshot: { ...appData.rates },
+            rateSnapshot: { ...rates },
             timestamp: new Date().toISOString()
         };
 
@@ -209,7 +215,7 @@ export function Calculator() {
                         className="w-full"
                     >
                         <option value="">-- ဖောက်သည် ရွေးပါ --</option>
-                        {appData.customers.map(c => (
+                        {customers.map(c => (
                             <option key={c.id} value={c.id}>{c.name} ({c.phone || '-'})</option>
                         ))}
                     </Select>

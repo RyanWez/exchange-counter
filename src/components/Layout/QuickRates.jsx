@@ -1,10 +1,11 @@
 import React from 'react';
-import { useApp } from '../../context/AppContext';
+import { useUI } from '../../context/UIContext';
+import { useRates } from '../../context/RateContext';
 import { Card } from '../UI/Card';
 
 export function QuickRates() {
-    const { appData, formatNum, formatNumAuto } = useApp();
-    const { rates } = appData;
+    const { formatNum, formatNumAuto } = useUI();
+    const { rates } = useRates();
 
     return (
         <Card variant="gold" className="mx-4 mt-3 rounded-2xl p-4">

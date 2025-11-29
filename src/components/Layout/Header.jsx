@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../../context/AppContext';
+import { useUser } from '../../context/UserContext';
 import { InputModal } from '../UI/InputModal';
 
 export function Header() {
-    const { appData, updateSettings } = useApp();
+    const { settings, updateSettings } = useUser();
     const [dateStr, setDateStr] = useState('');
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export function Header() {
                             <img src="/images/logo.svg" alt="Logo" className="w-full h-full object-contain drop-shadow-lg" />
                         </div>
                         <div>
-                            <h1 className="font-bold text-white text-xl group-hover:text-amber-400 transition">{appData.settings.shopName}</h1>
+                            <h1 className="font-bold text-white text-xl group-hover:text-amber-400 transition">{settings.shopName}</h1>
                             <p className="text-gray-400 text-xs">{dateStr}</p>
                         </div>
                     </div>
@@ -52,7 +52,7 @@ export function Header() {
                 onClose={() => setIsSettingsOpen(false)}
                 onConfirm={handleSettingsSave}
                 title="ဆိုင်နာမည် ပြောင်းမည်"
-                defaultValue={appData.settings.shopName}
+                defaultValue={settings.shopName}
                 placeholder="ဆိုင်နာမည် ရိုက်ထည့်ပါ"
             />
         </>
