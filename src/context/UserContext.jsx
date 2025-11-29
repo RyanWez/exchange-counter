@@ -6,36 +6,35 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
     const { showToast } = useUI();
     
-    const [userData, setUserData] = useState({
-        customers: [],
-        settings: { shopName: 'Exchange Counter', pin: '1234' }
-    });
-
-    // Load data
-    useEffect(() => {
+    const [userData, setUserData] = useState(() => {
         const saved = localStorage.getItem('exchangeUserData');
         if (saved) {
             try {
-                setUserData(JSON.parse(saved));
+                return JSON.parse(saved);
             } catch (e) {
                 console.error("Failed to parse user data", e);
             }
-        } else {
-            // Migration from old data
-            const oldSaved = localStorage.getItem('exchangeCounterData');
-            if (oldSaved) {
-                try {
-                    const oldData = JSON.parse(oldSaved);
-                    setUserData(prev => ({
-                        customers: oldData.customers || prev.customers,
-                        settings: oldData.settings || prev.settings
-                    }));
-                } catch (e) {
-                    console.error("Failed to migrate old data", e);
-                }
+        }
+        
+        // Migration from old data
+        const oldSaved = localStorage.getItem('exchangeCounterData');
+        if (oldSaved) {
+            try {
+                const oldData = JSON.parse(oldSaved);
+                return {
+                    customers: oldData.customers || [],
+                    settings: oldData.settings || { shopName: 'Exchange Counter', pin: '1234' }
+                };
+            } catch (e) {
+                console.error("Failed to migrate old data", e);
             }
         }
-    }, []);
+
+        return {
+            customers: [],
+            settings: { shopName: 'Exchange Counter', pin: '1234' }
+        };
+    });
 
     // Save data
     useEffect(() => {

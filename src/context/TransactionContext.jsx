@@ -6,36 +6,35 @@ const TransactionContext = createContext();
 export function TransactionProvider({ children }) {
     const { showToast } = useUI();
     
-    const [transactionData, setTransactionData] = useState({
-        transactions: [],
-        dailyClosing: []
-    });
-
-    // Load data
-    useEffect(() => {
+    const [transactionData, setTransactionData] = useState(() => {
         const saved = localStorage.getItem('exchangeTransactionData');
         if (saved) {
             try {
-                setTransactionData(JSON.parse(saved));
+                return JSON.parse(saved);
             } catch (e) {
                 console.error("Failed to parse transaction data", e);
             }
-        } else {
-            // Migration
-            const oldSaved = localStorage.getItem('exchangeCounterData');
-            if (oldSaved) {
-                try {
-                    const oldData = JSON.parse(oldSaved);
-                    setTransactionData(prev => ({
-                        transactions: oldData.transactions || prev.transactions,
-                        dailyClosing: oldData.dailyClosing || prev.dailyClosing
-                    }));
-                } catch (e) {
-                    console.error("Failed to migrate transaction data", e);
-                }
+        }
+        
+        // Migration
+        const oldSaved = localStorage.getItem('exchangeCounterData');
+        if (oldSaved) {
+            try {
+                const oldData = JSON.parse(oldSaved);
+                return {
+                    transactions: oldData.transactions || [],
+                    dailyClosing: oldData.dailyClosing || []
+                };
+            } catch (e) {
+                console.error("Failed to migrate transaction data", e);
             }
         }
-    }, []);
+
+        return {
+            transactions: [],
+            dailyClosing: []
+        };
+    });
 
     // Save data
     useEffect(() => {

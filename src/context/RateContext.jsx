@@ -7,34 +7,33 @@ const RateContext = createContext();
 export function RateProvider({ children }) {
     const { showToast } = useUI();
     
-    const [rates, setRates] = useState({
-        thb: { buy: 122.7, sell: 125.79 },
-        usd: { buy: 3945, sell: 4045 },
-        cny: { buy: 558, sell: 572 }
-    });
-
-    // Load data
-    useEffect(() => {
+    const [rates, setRates] = useState(() => {
         const saved = localStorage.getItem('exchangeRates');
         if (saved) {
             try {
-                setRates(JSON.parse(saved));
+                return JSON.parse(saved);
             } catch (e) {
                 console.error("Failed to parse rates", e);
             }
-        } else {
-            // Migration
-            const oldSaved = localStorage.getItem('exchangeCounterData');
-            if (oldSaved) {
-                try {
-                    const oldData = JSON.parse(oldSaved);
-                    if (oldData.rates) setRates(oldData.rates);
-                } catch (e) {
-                    console.error("Failed to migrate rates", e);
-                }
+        }
+        
+        // Migration
+        const oldSaved = localStorage.getItem('exchangeCounterData');
+        if (oldSaved) {
+            try {
+                const oldData = JSON.parse(oldSaved);
+                if (oldData.rates) return oldData.rates;
+            } catch (e) {
+                console.error("Failed to migrate rates", e);
             }
         }
-    }, []);
+
+        return {
+            thb: { buy: 122.7, sell: 125.79 },
+            usd: { buy: 3945, sell: 4045 },
+            cny: { buy: 558, sell: 572 }
+        };
+    });
 
     // Save data
     useEffect(() => {
