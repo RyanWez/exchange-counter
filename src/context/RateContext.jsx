@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useUI } from './UIContext';
+import Decimal from 'decimal.js';
 
 const RateContext = createContext();
 
@@ -46,32 +47,23 @@ export function RateProvider({ children }) {
     };
 
     const getRate = (from, to) => {
-        if (from === to) return 1;
+        if (from === to) return new Decimal(1);
 
         if (from === 'MMK') {
-            if (to === 'THB') return 1 / rates.thb.sell;
-            if (to === 'USD') return 1 / rates.usd.sell;
-            if (to === 'CNY') return 1 / rates.cny.sell;
+            if (to === 'THB') return new Decimal(1).div(rates.thb.sell);
+            if (to === 'USD') return new Decimal(1).div(rates.usd.sell);
+            if (to === 'CNY') return new Decimal(1).div(rates.cny.sell);
         }
         if (to === 'MMK') {
-            if (from === 'THB') return rates.thb.buy;
-            if (from === 'USD') return rates.usd.buy;
-            if (from === 'CNY') return rates.cny.buy;
+            if (from === 'THB') return new Decimal(rates.thb.buy);
+            if (from === 'USD') return new Decimal(rates.usd.buy);
+            if (from === 'CNY') return new Decimal(rates.cny.buy);
         }
+        
         // Recursive calculation for cross rates (e.g. USD -> THB)
-        // Note: This simple recursion assumes intermediate is MMK.
-        // To avoid infinite recursion if logic is wrong, be careful.
-        // But here it splits into (from->MMK) * (MMK->to).
-        // (from->MMK) calls getRate(from, 'MMK') which hits the second block.
-        // (MMK->to) calls getRate('MMK', to) which hits the first block.
-        // So depth is 1. Safe.
-        
-        // However, we need to access the function itself? No, it's in scope.
-        // But wait, if I call getRate inside getRate, it works.
-        
         const fromToMmk = getRate(from, 'MMK');
         const mmkToTo = getRate('MMK', to);
-        return fromToMmk * mmkToTo;
+        return fromToMmk.times(mmkToTo);
     };
 
     return (

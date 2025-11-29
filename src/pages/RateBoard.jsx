@@ -4,6 +4,7 @@ import { useRates } from '../context/RateContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input } from '../components/UI/Input';
+import Decimal from 'decimal.js';
 
 export function RateBoard() {
     const { formatNum, formatNumAuto } = useUI();
@@ -22,7 +23,7 @@ export function RateBoard() {
     };
 
     const calculateProfit = (currency) => {
-        return rates[currency].sell - rates[currency].buy;
+        return new Decimal(rates[currency].sell).minus(rates[currency].buy).toNumber();
     };
 
     const handleSave = () => {

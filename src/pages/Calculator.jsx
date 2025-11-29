@@ -8,6 +8,7 @@ import { Button } from '../components/UI/Button';
 import { Input, Select } from '../components/UI/Input';
 import { Modal } from '../components/UI/Modal';
 import { Voucher } from '../components/UI/Voucher';
+import Decimal from 'decimal.js';
 
 export function Calculator() {
     const { formatNum, formatNumAuto, showToast } = useUI();
@@ -34,9 +35,10 @@ export function Calculator() {
     }, [fromCurrency, toCurrency, amount, rates]);
 
     const calculate = () => {
-        const val = parseFloat(amount.replace(/,/g, '')) || 0;
+        const valStr = amount.replace(/,/g, '');
+        const val = valStr ? new Decimal(valStr) : new Decimal(0);
         const rate = getRate(fromCurrency, toCurrency);
-        setResult(val * rate);
+        setResult(val.times(rate).toNumber());
 
         if (fromCurrency === 'MMK' && toCurrency !== 'MMK') {
             const sellRate = rates[toCurrency.toLowerCase()]?.sell || 1;
@@ -45,7 +47,7 @@ export function Calculator() {
             const buyRate = rates[fromCurrency.toLowerCase()]?.buy || 1;
             setRateDisplay(`1 ${fromCurrency} = ${formatNumAuto(buyRate)} MMK`);
         } else {
-            setRateDisplay(`1 ${fromCurrency} = ${formatNumAuto(rate)} ${toCurrency}`);
+            setRateDisplay(`1 ${fromCurrency} = ${formatNumAuto(rate.toNumber())} ${toCurrency}`);
         }
     };
 
@@ -65,26 +67,28 @@ export function Calculator() {
     };
 
     const handleSave = () => {
-        const val = parseFloat(amount.replace(/,/g, '')) || 0;
-        const fee = parseFloat(serviceFee.replace(/,/g, '')) || 0;
+        const valStr = amount.replace(/,/g, '');
+        const val = valStr ? new Decimal(valStr) : new Decimal(0);
+        const feeStr = serviceFee.replace(/,/g, '');
+        const fee = feeStr ? new Decimal(feeStr) : new Decimal(0);
 
-        if (val <= 0) {
+        if (val.lte(0)) {
             showToast('ပမာဏ ထည့်ပါ!');
             return;
         }
 
         const rate = getRate(fromCurrency, toCurrency);
-        const resultVal = val * rate;
+        const resultVal = val.times(rate);
 
         const transaction = {
             id: 'TXN' + Date.now(),
             type: mode,
             fromCurrency,
             toCurrency,
-            fromAmount: val,
-            toAmount: resultVal,
-            rate: rate,
-            serviceFee: fee,
+            fromAmount: val.toNumber(),
+            toAmount: resultVal.toNumber(),
+            rate: rate.toNumber(),
+            serviceFee: fee.toNumber(),
             payment,
             customerId,
             customerName: customerId ? customers.find(c => c.id === customerId)?.name : 'Walk-in',

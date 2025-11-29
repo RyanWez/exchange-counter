@@ -4,6 +4,7 @@ import { useTransactions } from '../context/TransactionContext';
 import { Card } from '../components/UI/Card';
 import { Button } from '../components/UI/Button';
 import { Input } from '../components/UI/Input';
+import Decimal from 'decimal.js';
 
 export function DailyClosing() {
     const { formatNum } = useUI();
@@ -19,20 +20,31 @@ export function DailyClosing() {
         const today = new Date().toISOString().split('T')[0];
         const todayTx = transactions.filter(tx => tx.timestamp.startsWith(today));
 
-        let flow = { mmk: { in: 0, out: 0 }, thb: { in: 0, out: 0 }, usd: { in: 0, out: 0 } };
+        let flow = { 
+            mmk: { in: new Decimal(0), out: new Decimal(0) }, 
+            thb: { in: new Decimal(0), out: new Decimal(0) }, 
+            usd: { in: new Decimal(0), out: new Decimal(0) } 
+        };
 
         todayTx.forEach(tx => {
             const fromKey = tx.fromCurrency.toLowerCase();
             const toKey = tx.toCurrency.toLowerCase();
 
-            if (flow[fromKey]) flow[fromKey].in += tx.fromAmount;
-            if (flow[toKey]) flow[toKey].out += tx.toAmount;
+            if (flow[fromKey]) flow[fromKey].in = flow[fromKey].in.plus(tx.fromAmount);
+            if (flow[toKey]) flow[toKey].out = flow[toKey].out.plus(tx.toAmount);
         });
+
+        // Convert Decimal back to numbers for display
+        const flowDisplay = {
+            mmk: { in: flow.mmk.in.toNumber(), out: flow.mmk.out.toNumber() },
+            thb: { in: flow.thb.in.toNumber(), out: flow.thb.out.toNumber() },
+            usd: { in: flow.usd.in.toNumber(), out: flow.usd.out.toNumber() }
+        };
 
         setSummary({
             count: todayTx.length,
-            serviceFee: todayTx.reduce((sum, tx) => sum + tx.serviceFee, 0),
-            flow
+            serviceFee: todayTx.reduce((sum, tx) => sum.plus(tx.serviceFee), new Decimal(0)).toNumber(),
+            flow: flowDisplay
         });
     }, [transactions]);
 
@@ -48,10 +60,10 @@ export function DailyClosing() {
         const closing = {
             date: new Date().toISOString().split('T')[0],
             stock: {
-                mmk: parseFloat(stock.mmk.replace(/,/g, '')) || 0,
-                thb: parseFloat(stock.thb.replace(/,/g, '')) || 0,
-                usd: parseFloat(stock.usd.replace(/,/g, '')) || 0,
-                cny: parseFloat(stock.cny.replace(/,/g, '')) || 0
+                mmk: new Decimal(stock.mmk.replace(/,/g, '') || 0).toNumber(),
+                thb: new Decimal(stock.thb.replace(/,/g, '') || 0).toNumber(),
+                usd: new Decimal(stock.usd.replace(/,/g, '') || 0).toNumber(),
+                cny: new Decimal(stock.cny.replace(/,/g, '') || 0).toNumber()
             },
             timestamp: new Date().toISOString()
         };
