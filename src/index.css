@@ -453,3 +453,19 @@ body {
     background: linear-gradient(135deg, rgba(247, 147, 26, 0.2) 0%, rgba(255, 205, 0, 0.1) 100%);
     border: 1px solid rgba(255, 205, 0, 0.3);
 }
+
+/* Global Cursor Styles */
+button,
+a,
+[role="button"],
+label,
+.btn-primary,
+.btn-gold,
+.btn-secondary,
+.segment-btn,
+.payment-btn,
+.tab-item,
+.list-item,
+.clickable {
+    cursor: pointer;
+}
