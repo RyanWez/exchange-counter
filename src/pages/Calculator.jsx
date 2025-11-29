@@ -166,6 +166,7 @@ export function Calculator() {
                         onChange={handleAmountChange}
                         className="text-center text-3xl font-bold"
                         placeholder="0"
+                        inputMode="decimal"
                     />
                 </div>
 
@@ -192,6 +193,7 @@ export function Calculator() {
                         onChange={handleFeeChange}
                         className="text-center font-bold"
                         placeholder="0"
+                        inputMode="decimal"
                     />
                 </div>
 

@@ -53,6 +53,7 @@ export function RateBoard() {
                                 value={rates.thb.buy}
                                 onChange={(e) => handleChange('thb', 'buy', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                         <div>
@@ -62,6 +63,7 @@ export function RateBoard() {
                                 value={rates.thb.sell}
                                 onChange={(e) => handleChange('thb', 'sell', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                     </div>
@@ -84,6 +86,7 @@ export function RateBoard() {
                                 value={rates.usd.buy}
                                 onChange={(e) => handleChange('usd', 'buy', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                         <div>
@@ -93,6 +96,7 @@ export function RateBoard() {
                                 value={rates.usd.sell}
                                 onChange={(e) => handleChange('usd', 'sell', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                     </div>
@@ -115,6 +119,7 @@ export function RateBoard() {
                                 value={rates.cny.buy}
                                 onChange={(e) => handleChange('cny', 'buy', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                         <div>
@@ -124,6 +129,7 @@ export function RateBoard() {
                                 value={rates.cny.sell}
                                 onChange={(e) => handleChange('cny', 'sell', e.target.value)}
                                 className="text-center font-bold"
+                                inputMode="decimal"
                             />
                         </div>
                     </div>

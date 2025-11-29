@@ -133,6 +133,7 @@ export function DailyClosing() {
                             onChange={(e) => handleStockChange('mmk', e.target.value)}
                             className="text-right font-bold"
                             placeholder="0"
+                            inputMode="decimal"
                         />
                     </div>
                     <div>
@@ -142,6 +143,7 @@ export function DailyClosing() {
                             onChange={(e) => handleStockChange('thb', e.target.value)}
                             className="text-right font-bold"
                             placeholder="0"
+                            inputMode="decimal"
                         />
                     </div>
                     <div>
@@ -151,6 +153,7 @@ export function DailyClosing() {
                             onChange={(e) => handleStockChange('usd', e.target.value)}
                             className="text-right font-bold"
                             placeholder="0"
+                            inputMode="decimal"
                         />
                     </div>
                     <div>
@@ -160,6 +163,7 @@ export function DailyClosing() {
                             onChange={(e) => handleStockChange('cny', e.target.value)}
                             className="text-right font-bold"
                             placeholder="0"
+                            inputMode="decimal"
                         />
                     </div>
                 </div>
