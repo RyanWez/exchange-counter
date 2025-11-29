@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useUI } from '../../context/UIContext';
 import { useUser } from '../../context/UserContext';
 import { InputModal } from '../UI/InputModal';
 
 export function Header() {
+    const { showToast } = useUI();
     const { settings, updateSettings } = useUser();
     const [dateStr, setDateStr] = useState('');
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -15,6 +17,10 @@ export function Header() {
 
     const handleSettingsSave = (newName) => {
         if (newName && newName.trim()) {
+            if (newName.length > 20) {
+                showToast('နာမည် အရမ်းရှည်နေပါတယ် (Max 20)');
+                return; 
+            }
             updateSettings({ shopName: newName.trim() });
         }
     };

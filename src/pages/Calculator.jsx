@@ -58,6 +58,7 @@ export function Calculator() {
 
     const handleAmountChange = (e) => {
         const val = e.target.value.replace(/[^0-9]/g, '');
+        if (val.length > 15) return;
         setAmount(val ? parseInt(val).toLocaleString('en-US') : '');
     };
 

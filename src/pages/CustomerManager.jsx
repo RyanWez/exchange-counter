@@ -20,6 +20,11 @@ export function CustomerManager() {
             return;
         }
 
+        if (customers.some(c => c.name.toLowerCase() === name.trim().toLowerCase())) {
+            showToast('ဒီနာမည်နဲ့ ဖောက်သည် ရှိပြီးသားပါ! ⚠️');
+            return;
+        }
+
         const customer = {
             id: 'CUS' + Date.now(),
             name: name.trim(),
@@ -55,7 +60,7 @@ export function CustomerManager() {
                 />
                 <Input
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
                     className="mb-3"
                     placeholder="ဖုန်းနံပါတ်"
                 />

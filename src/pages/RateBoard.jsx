@@ -16,9 +16,11 @@ export function RateBoard() {
     }, [currentRates]);
 
     const handleChange = (currency, type, value) => {
+        const val = parseFloat(value);
+        if (val < 0) return;
         setRates(prev => ({
             ...prev,
-            [currency]: { ...prev[currency], [type]: parseFloat(value) || 0 }
+            [currency]: { ...prev[currency], [type]: val || 0 }
         }));
     };
 
@@ -47,7 +49,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-teal-200 mb-1 block">ဝယ် (1 ဘတ် = ? ကျပ်)</label>
                             <Input
-                                type="number" step="0.01"
+                                type="number" step="0.01" min="0"
                                 value={rates.thb.buy}
                                 onChange={(e) => handleChange('thb', 'buy', e.target.value)}
                                 className="text-center font-bold"
@@ -56,7 +58,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-teal-200 mb-1 block">ရောင်း (1 ဘတ် = ? ကျပ်)</label>
                             <Input
-                                type="number" step="0.01"
+                                type="number" step="0.01" min="0"
                                 value={rates.thb.sell}
                                 onChange={(e) => handleChange('thb', 'sell', e.target.value)}
                                 className="text-center font-bold"
@@ -78,7 +80,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-purple-200 mb-1 block">ဝယ် (1$ = ? ကျပ်)</label>
                             <Input
-                                type="number" step="1"
+                                type="number" step="1" min="0"
                                 value={rates.usd.buy}
                                 onChange={(e) => handleChange('usd', 'buy', e.target.value)}
                                 className="text-center font-bold"
@@ -87,7 +89,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-purple-200 mb-1 block">ရောင်း (1$ = ? ကျပ်)</label>
                             <Input
-                                type="number" step="1"
+                                type="number" step="1" min="0"
                                 value={rates.usd.sell}
                                 onChange={(e) => handleChange('usd', 'sell', e.target.value)}
                                 className="text-center font-bold"
@@ -109,7 +111,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-red-200 mb-1 block">ဝယ် (1¥ = ? ကျပ်)</label>
                             <Input
-                                type="number" step="1"
+                                type="number" step="1" min="0"
                                 value={rates.cny.buy}
                                 onChange={(e) => handleChange('cny', 'buy', e.target.value)}
                                 className="text-center font-bold"
@@ -118,7 +120,7 @@ export function RateBoard() {
                         <div>
                             <label className="text-xs text-red-200 mb-1 block">ရောင်း (1¥ = ? ကျပ်)</label>
                             <Input
-                                type="number" step="1"
+                                type="number" step="1" min="0"
                                 value={rates.cny.sell}
                                 onChange={(e) => handleChange('cny', 'sell', e.target.value)}
                                 className="text-center font-bold"
