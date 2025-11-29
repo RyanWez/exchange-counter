@@ -20,7 +20,7 @@ export function InputModal({ isOpen, onClose, onConfirm, title, defaultValue = '
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <Card className="rounded-3xl p-6">
+            <Card className="rounded-3xl p-6 bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-2xl">
                 <div className="text-center mb-4">
                     <div className="w-16 h-16 gold-gradient rounded-full mx-auto flex items-center justify-center mb-3">
                         <span className="text-3xl">✏️</span>
